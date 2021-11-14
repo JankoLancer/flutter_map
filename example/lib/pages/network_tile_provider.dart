@@ -75,6 +75,7 @@ class NetworkTileProviderPage extends StatelessWidget {
                     // TileProvider with a caching and retry strategy, like
                     // NetworkTileProvider or CachedNetworkTileProvider
                     tileProvider: NetworkTileProvider(),
+                    preload: 2,
                   ),
                   MarkerLayerOptions(markers: markers)
                 ],

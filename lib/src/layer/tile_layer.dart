@@ -140,6 +140,10 @@ class TileLayerOptions extends LayerOptions {
   /// unloading them.
   final int keepBuffer;
 
+  /// When panning the map, preload this many rows and columns of tiles
+  /// so they are already available before user pan to them
+  final int preload;
+
   /// Placeholder to show until tile images are fetched by the provider.
   final ImageProvider? placeholderImage;
 
@@ -265,6 +269,7 @@ class TileLayerOptions extends LayerOptions {
       Map<String, String>? additionalOptions,
       this.subdomains = const <String>[],
       this.keepBuffer = 2,
+      this.preload = 0,
       this.backgroundColor = const Color(0xFFE0E0E0),
       this.placeholderImage,
       this.errorImage,
@@ -967,6 +972,11 @@ class _TileLayerState extends State<TileLayer> with TickerProviderStateMixin {
       tileRange.bottomLeft - CustomPoint(margin, -margin),
       tileRange.topRight + CustomPoint(margin, -margin),
     );
+    tileRange = tileRange
+        .extend(CustomPoint(tileRange.min.x - options.preload,
+            tileRange.min.y - options.preload))
+        .extend(CustomPoint(tileRange.max.x + options.preload,
+            tileRange.max.y + options.preload));
 
     for (var entry in _tiles.entries) {
       var tile = entry.value;
